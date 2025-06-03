@@ -1,0 +1,52 @@
+# 워크플로우 이름
+name: 일일 뉴스 업데이트 (Daily News Update)
+
+# 워크플로우 트리거 조건
+on:
+  schedule:
+    # 매일 자정 UTC (한국 시간 오전 9시)에 실행
+    # 참고: cron 시간은 UTC 기준입니다. '0 0 * * *'는 자정 UTC를 의미합니다.
+    - cron: '0 0 * * *'
+  workflow_dispatch: # GitHub UI에서 수동으로 워크플로우 실행 가능
+
+# 워크플로우 작업 정의
+jobs:
+  update_news_job: # 작업 ID
+    runs-on: ubuntu-latest # 작업 실행 환경 (최신 Ubuntu)
+
+    steps:
+      # 1단계: 리포지토리 코드 체크아웃
+      - name: 코드 체크아웃 (Checkout repository)
+        uses: actions/checkout@v4 # 리포지토리의 코드를 워크플로우 환경으로 가져옴
+
+      # 2단계: Python 환경 설정
+      - name: Python 환경 설정 (Set up Python environment)
+        uses: actions/setup-python@v5 # Python 환경 설정 액션
+        with:
+          python-version: '3.9' # 사용할 Python 버전 (3.9 이상 권장)
+
+      # 3단계: Python 의존성 설치
+      - name: 의존성 설치 (Install dependencies)
+        run: |
+          python -m pip install --upgrade pip
+          # requirements.txt 파일에 명시된 라이브러리 설치
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 4단계: 뉴스 업데이트 Python 스크립트 실행
+      - name: 뉴스 업데이트 스크립트 실행 (Run news updater script)
+        env:
+          # GitHub Secrets에서 API 키를 환경 변수로 설정
+          # TRANSLATION_API_KEY: 번역/요약 API를 위한 키 (예: OpenRouter, DeepL 등)
+          # NEWS_API_KEY: 특정 뉴스 API 사용 시 필요한 키 (현재 스크립트는 RSS 기반이므로 필수는 아님)
+          # 사용자는 자신의 GitHub 리포지토리의 Settings > Secrets and variables > Actions 에서 아래 Secrets를 설정해야 합니다.
+          TRANSLATION_API_KEY: ${{ secrets.TRANSLATION_API_KEY }}
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY_IF_NEEDED }} # 필요에 따라 사용할 뉴스 API 키
+        run: python scripts/news_updater.py # 실행할 Python 스크립트 경로
+
+      # 5단계: 변경된 파일 커밋 및 푸시
+      - name: 변경사항 커밋 및 푸시 (Commit and push changes)
+        uses: stefanzweifel/git-auto-commit-action@v5 # 자동 커밋/푸시 액션
+        with:
+          commit_message: 'Automated daily news update' # 커밋 메시지
+          branch: main # 대상 브랜치 (Netlify 배포 트리거 브랜치와 일치해야 함)
+          # GITHUB_TOKEN은 자동으로 제공됨 (contents: write 권한 필요)
