@@ -2,13 +2,14 @@
 name: 일일 뉴스 업데이트 (Daily News Update)
 
 # 워크플로우 트리거 조건
-on:
+on: 
   schedule:
     # 매일 자정 UTC (한국 시간 오전 9시)에 실행
     # 참고: cron 시간은 UTC 기준입니다. '0 0 * * *'는 자정 UTC를 의미합니다.
     - cron: '0 0 * * *'
   workflow_dispatch: # GitHub UI에서 수동으로 워크플로우 실행 가능
-
+    # 이주석은 삭제하세요
+    
 # 워크플로우 작업 정의
 jobs:
   update_news_job: # 작업 ID
