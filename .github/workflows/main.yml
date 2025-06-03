@@ -49,4 +49,5 @@ jobs:
         with:
           commit_message: 'Automated daily news update' # 커밋 메시지
           branch: main # 대상 브랜치 (Netlify 배포 트리거 브랜치와 일치해야 함)
+          token: ${{ secrets.GITHUB_TOKEN }}
           # GITHUB_TOKEN은 자동으로 제공됨 (contents: write 권한 필요)
