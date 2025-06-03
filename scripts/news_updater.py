@@ -9,7 +9,9 @@ from datetime import datetime, timedelta, timezone # 시간 처리
 import pytz # 시간대 처리
 import re # 정규 표현식 (슬러그 생성 등)
 import logging # 로깅
+import openai
 from dotenv import load_dotenv # 로컬 환경 변수 로드용
+
 
 # 로깅 기본 설정
 # 로그 레벨: INFO, WARNING, ERROR, DEBUG, CRITICAL
@@ -151,99 +153,44 @@ def fetch_full_content_from_url(article_url):
 # 예를 들어, OpenRouter (무료 모델 포함), DeepL API, Google Cloud Translation API 등을 사용할 수 있습니다.
 # API 키는 환경 변수 (예: TRANSLATION_API_KEY)를 통해 안전하게 관리하세요.
 # 이 함수는 영어 제목과 영어 본문을 입력받아, 한국어 제목과 한국어 요약 본문을 반환해야 합니다.
+import openai
+
 def translate_and_summarize_content(english_title, english_content, target_language="ko"):
-    """
-    실제 번역 및 요약 API로 대체되어야 하는 플레이스홀더 함수입니다.
-    현재는 원문 텍스트와 함께 안내 메시지를 포함한 플레이스홀더 값을 반환합니다.
-    """
-    api_key = os.getenv("TRANSLATION_API_KEY") 
-
+    api_key = os.getenv("TRANSLATION_API_KEY")
     if not api_key:
-        logging.warning(
-            "TRANSLATION_API_KEY 환경 변수가 설정되지 않았습니다. "
-            "실제 번역 및 요약을 위해서는 유효한 API 키를 설정해야 합니다. "
-            "현재는 원본 내용 기반의 플레이스홀더가 사용됩니다."
-        )
-        korean_title_placeholder = f"[미번역] {english_title}"
-        korean_summary_placeholder = (
-            f"[번역 및 요약되지 않음 - TRANSLATION_API_KEY 필요]\n\n"
-            f"이곳에 '{english_title}' 기사의 한국어 번역 및 요약 내용이 와야 합니다.\n"
-            f"현재는 원본 영어 내용의 일부만 표시됩니다:\n\n{english_content[:800]}...\n\n"
-            f"---\n**안내:** `TRANSLATION_API_KEY` 환경 변수를 설정하고, "
-            f"`translate_and_summarize_content` 함수 내에 실제 번역/요약 API 호출 로직을 구현해주세요. "
-            f"OpenRouter API (예: 'deepseek/deepseek-chat-v3-0324:free' 모델) 등을 활용할 수 있습니다."
-        )
-        return korean_title_placeholder, korean_summary_placeholder
+        logging.warning("TRANSLATION_API_KEY 환경 변수가 설정되지 않았습니다.")
+        return "[미번역] " + english_title, english_content
 
-    logging.info(f"'{english_title}'의 번역 및 요약을 시도합니다 (현재 플레이스홀더 동작). API 키 일부: {api_key[:4]}...")
-    
-    # --- 사용자가 구현할 실제 API 연동 로직 ---
-    # 아래는 예시일 뿐이며, 사용자는 자신이 선택한 API 서비스의 문서를 참조하여 구현해야 합니다.
-    # 예시: OpenRouter API (deepseek/deepseek-chat-v3-0324:free 모델 사용)
-    # try:
-    #     headers = {
-    #         "Authorization": f"Bearer {api_key}",
-    #         "Content-Type": "application/json",
-    #         "HTTP-Referer": "YOUR_SITE_URL", # OpenRouter 권장 사항
-    #         "X-Title": "YOUR_PROJECT_TITLE" # OpenRouter 권장 사항
-    #     }
-    #
-    #     # 1. 제목 번역
-    #     title_payload = {
-    #         "model": "deepseek/deepseek-chat-v3-0324:free",
-    #         "messages": [
-    #             {"role": "system", "content": f"You are an expert translator. Translate the following English news headline into concise and natural {target_language}."},
-    #             {"role": "user", "content": english_title}
-    #         ]
-    #     }
-    #     title_response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=title_payload, timeout=30)
-    #     title_response.raise_for_status()
-    #     korean_title = title_response.json()['choices'][0]['message']['content'].strip()
-    #
-    #     # 2. 내용 번역 및 요약
-    #     # (요청 길이 제한에 유의. 필요시 내용 분할 또는 요약 후 번역)
-    #     content_summary_prompt = (
-    #         f"Please perform the following two tasks on the English news article content provided below:\n"
-    #         f"1. Translate the entire article into natural {target_language}.\n"
-    #         f"2. After translating, summarize the {target_language} content into 3-5 main paragraphs, focusing on key information and insights.\n"
-    #         f"Ensure the final output is only the {target_language} summary.\n\n"
-    #         f"English Article Content:\n{english_content[:3000]}" # API 토큰 제한 고려하여 내용 자르기
-    #     )
-    #     summary_payload = {
-    #         "model": "deepseek/deepseek-chat-v3-0324:free", # 또는 더 큰 컨텍스트를 가진 모델 고려
-    #         "messages": [
-    #             {"role": "system", "content": f"You are an expert multilingual assistant specializing in news translation and summarization."},
-    #             {"role": "user", "content": content_summary_prompt}
-    #         ]
-    #     }
-    #     summary_response = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=summary_payload, timeout=120) # 요약은 더 오래 걸릴 수 있음
-    #     summary_response.raise_for_status()
-    #     korean_summary = summary_response.json()['choices'][0]['message']['content'].strip()
-    #
-    #     logging.info(f"API를 통해 '{english_title}' 번역 및 요약 성공.")
-    #     return korean_title, korean_summary
-    #
-    # except requests.RequestException as e:
-    #     logging.error(f"API 요청 중 오류 발생 ({english_title}): {e}")
-    # except (KeyError, IndexError, TypeError) as e:
-    #     logging.error(f"API 응답 처리 중 오류 발생 ({english_title}): {e}. 응답: {title_response.text if 'title_response' in locals() else summary_response.text if 'summary_response' in locals() else 'N/A'}")
-    #
-    # # API 호출 실패 시 또는 아직 구현 전일 때의 플레이스홀더 반환
-    # logging.warning(f"API 호출 실패 또는 로직 미구현으로 플레이스홀더 반환: {english_title}")
-    # --- 실제 API 연동 로직 끝 ---
+    openai.api_key = api_key
 
-    # 아래는 API 연동 전의 플레이스홀더 반환 값입니다.
-    # 사용자가 위 실제 API 로직을 구현하면 이 부분은 제거되거나 주석 처리되어야 합니다.
-    korean_title_placeholder = f"[번역된 제목 Placeholder] {english_title}"
-    korean_summary_placeholder = (
-        f"[번역 및 요약된 본문 Placeholder]\n\n"
-        f"이곳에 '{english_title}' 기사의 **실제 한국어 요약 내용**이 와야 합니다.\n"
-        f"이 메시지는 개발 및 테스트를 위한 임시 메시지이며, 실제 API 연동이 필요합니다.\n\n"
-        f"**원본 영어 내용의 일부 (첫 800자):**\n{english_content[:800]}...\n\n"
-        f"---\n**중요:** `scripts/news_updater.py` 파일 내의 `translate_and_summarize_content` 함수에서 "
-        f"실제 번역 및 요약 API 호출 로직을 구현하고, 유효한 `TRANSLATION_API_KEY`를 GitHub Secrets에 설정해야 합니다."
-    )
-    return korean_title_placeholder, korean_summary_placeholder
+    try:
+        # 1. 제목 번역 (짧고 자연스럽게)
+        title_prompt = f"Translate this news headline to natural and concise Korean:\n{english_title}"
+        title_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": title_prompt}],
+            timeout=30
+        )
+        korean_title = title_response.choices[0].message.content.strip()
+
+        # 2. 본문 번역 및 요약
+        summary_prompt = (
+            f"다음은 영어 뉴스 기사입니다. 내용을 한국어로 번역한 후, 핵심 정보와 주요 인사이트 위주로 3~5개의 단락으로 짧고 명확하게 요약해 주세요. 결과물에는 반드시 한국어 요약만 남겨 주세요.\n\n"
+            f"뉴스 기사:\n{english_content[:3000]}"
+        )
+        summary_response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": summary_prompt}],
+            timeout=60
+        )
+        korean_summary = summary_response.choices[0].message.content.strip()
+
+        return korean_title, korean_summary
+
+    except Exception as e:
+        logging.error(f"OpenAI API 호출 중 오류: {e}")
+        return "[API 오류] " + english_title, "[API 오류] 내용 생성 실패"
+
 
 
 # --- 주요 실행 로직 ---
