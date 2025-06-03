@@ -35,7 +35,7 @@ body {
 
 .prose-sky_custom code::before,
 .prose-sky_custom code::after {
-    content: none; /* Remove backticks from inline code if not desired */
+    content: none; /* Remove.. backticks from inline code if not desired */
 }
 .prose-sky_custom code {
     color: theme('colors.sky.700');
