@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Tailwind Typography theme for article body */
+.prose-sky_custom h1,
+.prose-sky_custom h2,
+.prose-sky_custom h3,
+.prose-sky_custom h4,
+.prose-sky_custom strong {
+    color: theme('colors.sky.800');
+}
+
+.prose-sky_custom a {
+    color: theme('colors.sky.600');
+    transition: color 0.3s ease;
+}
+
+.prose-sky_custom a:hover {
+    color: theme('colors.sky.700');
+}
+
+.prose-sky_custom ul > li::before {
+    background-color: theme('colors.sky.500');
+}
+
+.prose-sky_custom blockquote {
+    border-left-color: theme('colors.sky.300');
+    color: theme('colors.slate.600');
+}
+
+.prose-sky_custom code::before,
+.prose-sky_custom code::after {
+    content: none; /* Remove backticks from inline code if not desired */
+}
+.prose-sky_custom code {
+    color: theme('colors.sky.700');
+    background-color: theme('colors.sky.50');
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+/* Ensure icons are sized correctly if not specified inline */
+i[data-lucide] {
+    display: inline-block; /* Helps with alignment */
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}

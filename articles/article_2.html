@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>샘플 기사 2: 이더리움 확장성 솔루션 - 코인 뉴스 RUSH</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="../css/style.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="../index.html" class="flex items-center space-x-2">
+                <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-sky-600">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M50 0C22.3858 0 0 22.3858 0 50C0 77.6142 22.3858 100 50 100C77.6142 100 100 77.6142 100 50C100 22.3858 77.6142 0 50 0ZM50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10Z" fill="currentColor"/>
+                    <path d="M40 50L50 35L60 50L50 65L40 50Z" fill="currentColor"/>
+                </svg>
+                <h1 class="text-2xl font-bold text-sky-700">코인 뉴스 RUSH</h1>
+            </a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="../index.html" class="text-slate-600 hover:text-sky-600 transition-colors">홈</a>
+                <a href="../index.html#latest-news" class="text-slate-600 hover:text-sky-600 transition-colors">최신 뉴스</a>
+                <a href="../index.html#featured-news" class="text-slate-600 hover:text-sky-600 transition-colors">주요 뉴스</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden p-2 text-slate-600 hover:text-sky-600">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <a href="../index.html" class="block px-4 py-3 text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">홈</a>
+            <a href="../index.html#latest-news" class="block px-4 py-3 text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">최신 뉴스</a>
+            <a href="../index.html#featured-news" class="block px-4 py-3 text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">주요 뉴스</a>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <main class="container mx-auto px-4 py-8">
+        <article class="bg-white p-6 sm:p-8 lg:p-12 rounded-xl shadow-xl max-w-4xl mx-auto">
+            <!-- Breadcrumbs -->
+            <div class="mb-6 text-sm text-slate-500">
+                <a href="../index.html" class="hover:text-sky-600">홈</a> &gt; 
+                <a href="../index.html#latest-news" class="hover:text-sky-600">최신 뉴스</a> &gt; 
+                <span class="text-slate-700">이더리움 확장성 솔루션</span>
+            </div>
+
+            <!-- Article Title -->
+            <h1 class="text-3xl lg:text-4xl font-bold text-sky-800 mb-4 leading-tight">샘플 기사 2: 이더리움 확장성 솔루션 비교 분석</h1>
+            
+            <!-- Meta Information -->
+            <div class="mb-6 text-sm text-slate-500">
+                <span>게시 날짜: 2025년 6월 2일</span>
+                <span class="mx-2">|</span>
+                <span>작성자: 코인 뉴스 RUSH 팀</span>
+            </div>
+
+            <!-- Optional Article Image -->
+            <div class="my-8 h-64 md:h-96 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                 <i data-lucide="layers" class="w-20 h-20 text-indigo-500"></i>
+                <span class="ml-3 text-lg">이더리움 레이어2 관련 이미지</span>
+            </div>
+            
+            <!-- Article Body -->
+            <div class="prose prose-lg max-w-none prose-sky_custom">
+                <p>이더리움은 탈중앙화 애플리케이션(dApp) 생태계의 핵심 플랫폼이지만, 높은 가스비와 느린 거래 속도 등 확장성 문제에 직면해 왔습니다. 이를 해결하기 위해 다양한 레이어2 솔루션들이 등장하고 있으며, 본 기사에서는 주요 솔루션들을 비교 분석합니다.</p>
+                <p>롤업(Rollups), 사이드체인(Sidechains), 플라즈마(Plasma) 등 다양한 기술들이 경쟁하고 있으며, 각각의 장단점과 적용 사례를 통해 이더리움 생태계의 미래를 전망해 봅니다. 투자자와 개발자 모두에게 중요한 정보가 될 것입니다.</p>
+                <h2>주요 레이어2 솔루션</h2>
+                <ul>
+                    <li>옵티미스틱 롤업 (Optimistic Rollups)</li>
+                    <li>zk-롤업 (Zero-Knowledge Rollups)</li>
+                    <li>폴리곤 (Polygon) 등 사이드체인</li>
+                </ul>
+                <p>각 솔루션의 기술적 특징, 보안 수준, 개발 편의성 등을 고려하여 자신에게 맞는 기술을 선택하는 것이 중요합니다. 이더리움의 지속적인 발전을 위해 레이어2 솔루션들의 역할은 더욱 커질 것으로 예상됩니다.</p>
+            </div>
+
+            <!-- Back to list button -->
+            <div class="mt-12 pt-8 border-t border-slate-200 text-center">
+                <a href="../index.html#latest-news" class="inline-block bg-sky-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-sky-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <i data-lucide="arrow-left" class="inline-block w-4 h-4 mr-2"></i> 목록으로 돌아가기
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 mt-12">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p>&copy; 2025 코인 뉴스 RUSH. 모든 권리 보유.</p>
+            <p class="text-sm mt-1">
+                <a href="#" class="hover:text-sky-400 transition-colors">개인정보처리방침</a> | 
+                <a href="#" class="hover:text-sky-400 transition-colors">이용약관</a> | 
+                <a href="#" class="hover:text-sky-400 transition-colors">문의하기</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
