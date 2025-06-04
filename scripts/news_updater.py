@@ -101,20 +101,25 @@ def translate_and_summarize_content(english_title, english_content, target_langu
         logging.warning("TRANSLATION_API_KEY 환경 변수가 설정되지 않았습니다.")
         return "[미번역] " + english_title, english_content
 
-    openai.api_key = api_key
     try:
+        # 최신 openai(1.x.x) 방식: client 인스턴스 생성
+        client = openai.OpenAI(api_key=api_key)
+
+        # 1. 제목 번역
         title_prompt = f"Translate this news headline to natural and concise Korean:\n{english_title}"
-        title_response = openai.ChatCompletion.create(
+        title_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": title_prompt}],
             timeout=30
         )
         korean_title = title_response.choices[0].message.content.strip()
+
+        # 2. 본문 번역 및 요약
         summary_prompt = (
             f"다음은 영어 뉴스 기사입니다. 내용을 한국어로 번역한 후, 핵심 정보와 주요 인사이트 위주로 3~5개의 단락으로 짧고 명확하게 요약해 주세요. 결과물에는 반드시 한국어 요약만 남겨 주세요.\n\n"
             f"뉴스 기사:\n{english_content[:3000]}"
         )
-        summary_response = openai.ChatCompletion.create(
+        summary_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": summary_prompt}],
             timeout=60
@@ -220,6 +225,9 @@ def main():
         except Exception as e:
             logging.error(f"Markdown 파일 ('{article['title']}') 생성 중 오류: {e}")
     logging.info("일일 뉴스 업데이트 스크립트 완료.")
+    
+
 
 if __name__ == "__main__":
     main()
+
